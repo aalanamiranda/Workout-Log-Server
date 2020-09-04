@@ -4,7 +4,7 @@ let validateSession = require('../middleware/validate-session');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-router.post('/', function(req, res){
+router.post('/', validateSession, function(req, res){
     const logEntry = {
         description: req.body.log.description,
         definition: req.body.log.definition,
@@ -16,13 +16,13 @@ router.post('/', function(req, res){
     .catch(err => res.status(500).json({ error: err}))
 })
 
-router.get('/', function(req, res){
+router.get('/', validateSession, function(req, res){
     Log.findAll()
     .then(logs => res.status(200).json(logs))
     .catch(err => res.status(500).json({ error: err }))
 })
 
-router.get('/:id', function(req, res){
+router.get('/:id', validateSession, function(req, res){
     Log.findOne(
         {where: { id: req.params.id } }
     )
@@ -30,7 +30,7 @@ router.get('/:id', function(req, res){
     .catch(err => res.status(500).json({ error: err }))
 })
 
-router.put('/:id', function(req, res){
+router.put('/:id', validateSession, function(req, res){
     const updateLogEntry = {
         description: req.body.log.description,
         definition: req.body.log.definition,
@@ -45,7 +45,7 @@ router.put('/:id', function(req, res){
     .catch( err => res.status(500).json({ error: err }));
 })
 
-router.delete("/:id", function (req, res) {
+router.delete("/:id", validateSession, function (req, res) {
     const query = { where: { id: req.params.id } };
 
     Log.destroy(query)

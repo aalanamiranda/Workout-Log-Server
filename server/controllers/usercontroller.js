@@ -32,9 +32,9 @@ router.post('/login', validateSession, function(req, res){
     User.findOne({ where: { username: req.body.user.username } })
     .then(function loginSuccess(user){
         if(user){
-            console.log(req.body.user)
-            console.log(user)
-            bcrypt.compare(req.body.user.password, user.password, function(err, matches){
+            /* console.log(req.body.user)
+            console.log(user) */
+            bcrypt.compare(req.body.user.passwordhash, user.passwordhash, function(err, matches){
                 if(matches) {
                    
                     let token = jwt.sign({id: user.id}, process.env.JWT_SECRET, {expiresIn: '1d'})
